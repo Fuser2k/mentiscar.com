@@ -85,4 +85,7 @@ function initDB() {
   }
 }
 
-initDB();
+// Only initialize DB at runtime, not during Next.js build phase
+if (process.env.NEXT_PHASE !== "phase-production-build") {
+  initDB();
+}
