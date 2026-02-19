@@ -21,6 +21,9 @@ COPY . .
 # Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Create /app/data so SQLite path exists during build (Next.js sets NODE_ENV=production at build time)
+RUN mkdir -p /app/data
+
 RUN npm run build
 
 # Production image, copy all the files and run next
