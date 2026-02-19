@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-navy: #141F3A;
+  --color-deep-blue: #1C415D;
+  --color-teal: #286884;
+  --color-cyan-accent: #42A9CC;
+  --color-soft-white: #EAEBEE;
+  
+  --background-image-hero-gradient: linear-gradient(135deg, #141F3A 0%, #1C415D 45%, #42A9CC 100%);
+  
+  --font-sans: var(--font-inter);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #141F3A;
+  --font-inter: "Inter", sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
