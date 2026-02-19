@@ -20,7 +20,9 @@ export default auth((req) => {
     const isOnLogin = nextUrl.pathname.startsWith('/admin/login');
 
     if (isOnAdmin && !isOnLogin && !isLoggedIn) {
-        return NextResponse.redirect(new URL('/admin/login', nextUrl));
+        const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+        const loginUrl = new URL('/admin/login', `${protocol}://${host}`);
+        return NextResponse.redirect(loginUrl);
     }
 
     return NextResponse.next();
