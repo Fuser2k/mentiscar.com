@@ -11,8 +11,8 @@ const sqlite = new Database(dbPath);
 sqlite.pragma("journal_mode = WAL");
 export const db = drizzle(sqlite, { schema });
 
-// Auto-create tables if they don't exist
-function initDB() {
+// Always create tables so build-time DB queries don't fail with "no such table"
+function createTables() {
   sqlite.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
@@ -61,8 +61,10 @@ function initDB() {
       created_at INTEGER DEFAULT (CURRENT_TIMESTAMP)
     );
   `);
+}
 
-  // Seed admin user if ADMIN_EMAIL and ADMIN_PASSWORD env vars are set and no user exists
+// Seed admin user - only at runtime, not during build
+function seedAdmin() {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
 
@@ -86,7 +88,11 @@ function initDB() {
   }
 }
 
-// Only initialize DB at runtime, not during Next.js build phase
+// Always create tables (build + runtime)
+createTables();
+
+// Only seed admin at runtime
 if (process.env.NEXT_PHASE !== "phase-production-build") {
-  initDB();
+  seedAdmin();
 }
+
