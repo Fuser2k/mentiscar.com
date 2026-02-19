@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { posts } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 
-export const revalidate = 60; // ISR: Revalidate every 60 seconds
+export const dynamic = 'force-dynamic';
 
 export default async function NewsPage() {
     const publishedPosts = await db.select().from(posts)

@@ -8,15 +8,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import DOMPurify from "isomorphic-dompurify";
 
-export const revalidate = 60; // ISR
-export const dynamicParams = true; // Allow new pages to be generated on demand
-
-export async function generateStaticParams() {
-    const allPosts = await db.select({ slug: posts.slug }).from(posts).where(eq(posts.published, true));
-    return allPosts.map((post) => ({
-        slug: post.slug,
-    }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
