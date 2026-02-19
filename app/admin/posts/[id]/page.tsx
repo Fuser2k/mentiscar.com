@@ -4,6 +4,8 @@ import { posts } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const post = await db.select().from(posts).where(eq(posts.id, id)).get();
