@@ -8,8 +8,8 @@ import { DeletePostButton } from "@/components/admin/DeletePostButton";
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
-    const postCount = await db.select({ count: count() }).from(posts);
-    const recentPosts = await db.select().from(posts).orderBy(desc(posts.createdAt)).limit(5);
+    const postCount = await db.select({ count: count(posts.id) }).from(posts);
+    const recentPosts = await db.select().from(posts).orderBy(desc(posts.date)).limit(5);
 
     return (
         <div className="space-y-6">
