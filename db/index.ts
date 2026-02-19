@@ -6,7 +6,8 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
-const sqlite = new Database("sqlite.db");
+const dbPath = process.env.NODE_ENV === "production" ? "/app/data/sqlite.db" : "sqlite.db";
+const sqlite = new Database(dbPath);
 sqlite.pragma("journal_mode = WAL");
 export const db = drizzle(sqlite, { schema });
 
