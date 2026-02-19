@@ -12,7 +12,7 @@ export const db = drizzle(sqlite, { schema });
 
 // Auto-create tables if they don't exist
 function initDB() {
-    sqlite.exec(`
+  sqlite.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT,
@@ -61,23 +61,28 @@ function initDB() {
     );
   `);
 
-    // Seed admin user if ADMIN_EMAIL and ADMIN_PASSWORD env vars are set and no user exists
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+  // Seed admin user if ADMIN_EMAIL and ADMIN_PASSWORD env vars are set and no user exists
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
-    if (adminEmail && adminPassword) {
-        const existing = db.select().from(users).where(eq(users.email, adminEmail)).get();
-        if (!existing) {
-            const hashed = bcrypt.hashSync(adminPassword, 10);
-            db.insert(users).values({
-                id: uuidv4(),
-                name: "Admin",
-                email: adminEmail,
-                password: hashed,
-            }).run();
-            console.log(`[DB] Admin user created: ${adminEmail}`);
-        }
+  if (adminEmail && adminPassword) {
+    try {
+      const existing = db.select().from(users).where(eq(users.email, adminEmail)).get();
+      if (!existing) {
+        const hashed = bcrypt.hashSync(adminPassword, 10);
+        db.insert(users).values({
+          id: uuidv4(),
+          name: "Admin",
+          email: adminEmail,
+          password: hashed,
+        }).run();
+        console.log(`[DB] Admin user created: ${adminEmail}`);
+      }
+    } catch (e: unknown) {
+      // Ignore UNIQUE constraint errors (can happen with concurrent build workers)
+      if (e instanceof Error && !e.message.includes("UNIQUE")) throw e;
     }
+  }
 }
 
 initDB();
