@@ -66,7 +66,10 @@ export function AdminSidebar({ isOpen = true, onClose }: AdminSidebarProps) {
 
                 <div className="pt-8 border-t border-white/10 mt-4">
                     <button
-                        onClick={() => signOut({ callbackUrl: "/admin/login" })}
+                        onClick={() => {
+                            const callbackUrl = window.location.origin + "/admin/login";
+                            signOut({ callbackUrl });
+                        }}
                         className="flex items-center gap-3 px-4 py-3 w-full text-left text-red-400 hover:text-red-300 hover:bg-white/5 rounded-lg transition-colors"
                     >
                         <LogOut size={20} />
