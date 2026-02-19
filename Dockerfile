@@ -39,9 +39,15 @@ COPY --from=builder /app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
+# Create data directory for SQLite database with proper permissions
+RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+
 # Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Give nextjs user write access to the app directory for sqlite.db
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
